@@ -849,14 +849,23 @@
       .phone-main { width: 170px; }
       .phone-left { width: 130px; left: -5px; }
       .phone-right { width: 130px; right: -5px; }
-      .impact-stats { grid-template-columns: 1fr 1fr; }
+      .impact-stats { grid-template-columns: 1fr; gap: 16px; }
+      /* inline style="grid-column:span 2"로 인한 모바일 오버플로우 방지 */
+      .impact-stats .impact-stat-card[style] { grid-column: span 1 !important; }
 
       /* Inside */
       .inside-header { text-align: left; }
       .screenshot-item { width: 220px; }
 
       /* Team */
+      #team { padding: 72px 24px; }
+      .team-header { margin-bottom: 40px; }
       .team-grid { grid-template-columns: 1fr; gap: 12px; }
+      .team-card { padding: 28px 22px; min-height: 0; }
+      .team-avatar { width: 78px; height: 78px; font-size: 24px; margin-bottom: 16px; }
+      .team-name { font-size: 20px; margin-bottom: 6px; }
+      .team-role { font-size: 13px; margin-bottom: 10px; }
+      .team-bio { font-size: 13px; line-height: 1.6; }
 
       /* Contact */
       .contact-inner { grid-template-columns: 1fr; gap: 48px; }
@@ -873,8 +882,15 @@
       .hero-mockup-left { width: 95px; left: calc(50% - 105px); }
       .hero-mockup-right { width: 95px; left: calc(50% + 14px); }
       .hero-stats { flex-direction: column; gap: 16px; padding-top: 28px; }
+      #team { padding: 72px 24px; }
       .team-grid { grid-template-columns: 1fr; }
-      .impact-stats { grid-template-columns: 1fr; }
+      .team-card { padding: 24px 18px; }
+      .team-avatar { width: 70px; height: 70px; font-size: 22px; margin-bottom: 14px; }
+      .team-name { font-size: 18px; }
+      .team-role { font-size: 12px; margin-bottom: 10px; }
+      .impact-stats { grid-template-columns: 1fr; gap: 16px; }
+      /* inline style="grid-column:span 2"로 인한 모바일 오버플로우 방지 */
+      .impact-stats .impact-stat-card[style] { grid-column: span 1 !important; }
       .steps-grid { gap: 10px; }
     }
 
