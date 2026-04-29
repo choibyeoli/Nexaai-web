@@ -867,7 +867,6 @@
       .phone-left { width: 130px; left: -5px; }
       .phone-right { width: 130px; right: -5px; }
       .impact-stats { grid-template-columns: 1fr; gap: 16px; }
-      /* inline style="grid-column:span 2"로 인한 모바일 오버플로우 방지 */
       .impact-stats .impact-stat-card[style] { grid-column: span 1 !important; }
 
       /* Inside */
@@ -908,7 +907,6 @@
       .impact-stats { grid-template-columns: 1fr; gap: 16px; }
       .feature-grid { gap: 12px; }
       .feature-card { width: min(320px, 90vw); }
-      /* inline style="grid-column:span 2"로 인한 모바일 오버플로우 방지 */
       .impact-stats .impact-stat-card[style] { grid-column: span 1 !important; }
       .steps-grid { gap: 10px; }
     }
@@ -1477,9 +1475,17 @@
   // ── Hamburger menu ──
   const hamburger = document.getElementById('navHamburger');
   const mobileMenu = document.getElementById('mobileMenu');
+  function removeRequestDemoFromMobileMenu() {
+    mobileMenu.querySelectorAll('a').forEach(a => {
+      const t = (a.textContent || '').trim().toLowerCase();
+      if (t.includes('request demo')) a.remove();
+    });
+  }
+  removeRequestDemoFromMobileMenu();
   hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('open');
     mobileMenu.classList.toggle('open');
+    removeRequestDemoFromMobileMenu();
   });
   function closeMobileMenu() {
     hamburger.classList.remove('open');
