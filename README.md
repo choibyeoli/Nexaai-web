@@ -51,12 +51,6 @@ A high school student from Okinawa, Japan, and founder of the **Global Finance L
 | **OpenAI** | Sponsor & Strategic Partner |
 | **Microsoft** | Sponsor & Strategic Partner |
 | **Salesforce** | Sponsor & Strategic Partner |
-| **Columbia University** | Research Collaboration |
-| **Georgetown University** | Policy Research Collaboration |
-| **TEDx** | TEDxInnovation U Speaker (Ren Otani) |
-| **NHK Radio** | Featured Speaker |
-| **Okinawa Times / Ryukyu Shimpo** | Media Coverage |
-| **Van Cleef & Arpels** | Brand Collaboration |
  
 ---
  
