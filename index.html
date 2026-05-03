@@ -657,6 +657,26 @@
       align-self: flex-start;
     }
     .btn-accent:hover { background: var(--accent-dark); transform: translateY(-1px); }
+    .contact-form-status {
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 12px;
+      min-height: 1.25em;
+      color: rgba(255,255,255,0.45);
+    }
+    .contact-form-status.ok { color: #43C59E; }
+    .contact-form-status.err { color: #FF8A8A; }
+    .form-honeypot {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
     .contact-info {
       display: flex;
       flex-direction: column;
@@ -1295,40 +1315,42 @@
         </div>
       </div>
     </div>
-    <form class="contact-form reveal" style="transition-delay:0.15s" onsubmit="handleSubmit(event)">
+    <form id="contactForm" class="contact-form reveal" style="transition-delay:0.15s; position:relative" onsubmit="handleSubmit(event)" autocomplete="on">
+      <label class="form-honeypot" aria-hidden="true"><input type="text" name="_gotcha" tabindex="-1" autocomplete="off" /></label>
       <div class="form-row">
         <div class="form-field">
-          <label>First Name</label>
-          <input type="text" placeholder="John" required />
+          <label for="cf-first">First Name</label>
+          <input id="cf-first" name="first_name" type="text" placeholder="John" required />
         </div>
         <div class="form-field">
-          <label>Last Name</label>
-          <input type="text" placeholder="Doe" required />
+          <label for="cf-last">Last Name</label>
+          <input id="cf-last" name="last_name" type="text" placeholder="Doe" required />
         </div>
       </div>
       <div class="form-field">
-        <label>Work Email</label>
-        <input type="email" placeholder="john@school.edu" required />
+        <label for="cf-email">Work Email</label>
+        <input id="cf-email" name="email" type="email" placeholder="john@school.edu" required />
       </div>
       <div class="form-field">
-        <label>School / Organization</label>
-        <input type="text" placeholder="Enter your school name" />
+        <label for="cf-org">School / Organization</label>
+        <input id="cf-org" name="organization" type="text" placeholder="Enter your school name" />
       </div>
       <div class="form-field">
-        <label>Interest</label>
-        <select>
+        <label for="cf-interest">Interest</label>
+        <select id="cf-interest" name="interest">
           <option value="">Select an option</option>
-          <option>Request a Demo</option>
-          <option>Partnership</option>
-          <option>Pilot Program</option>
-          <option>General Inquiry</option>
+          <option value="Request a Demo">Request a Demo</option>
+          <option value="Partnership">Partnership</option>
+          <option value="Pilot Program">Pilot Program</option>
+          <option value="General Inquiry">General Inquiry</option>
         </select>
       </div>
       <div class="form-field">
-        <label>Message</label>
-        <textarea placeholder="Tell us about your school and how we can help..."></textarea>
+        <label for="cf-message">Message</label>
+        <textarea id="cf-message" name="message" placeholder="Tell us about your school and how we can help..."></textarea>
       </div>
       <button type="submit" class="btn-accent">Send Message →</button>
+      <p id="contactFormStatus" class="contact-form-status" aria-live="polite"></p>
     </form>
   </div>
 </div>
@@ -1476,16 +1498,72 @@
     carousel.scrollBy({ left: 340, behavior: 'smooth' });
   });
 
-  // ── Form submit ──
-  function handleSubmit(e) {
+  // ── Contact form → FormSubmit (무료 / 회원가입 불필요 · 첫 제출 시 받은편지함 인증) ──
+  var FORMSUBMIT_AJAX_URL = 'https://formsubmit.co/ajax/rensaan0108@gmail.com';
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    const btn = e.target.querySelector('button[type=submit]');
-    btn.textContent = '✓ Message sent!';
-    btn.style.background = '#43C59E';
-    setTimeout(() => {
-      btn.textContent = 'Send Message →';
-      btn.style.background = '';
-    }, 3000);
+    var form = document.getElementById('contactForm');
+    var btn = form.querySelector('button[type=submit]');
+    var statusEl = document.getElementById('contactFormStatus');
+    var origLabel = btn.textContent;
+    var honeypot = form.querySelector('input[name=_gotcha]');
+
+    if (honeypot && honeypot.value.trim() !== '') return;
+
+    statusEl.textContent = '';
+    statusEl.className = 'contact-form-status';
+
+    var first = (form.querySelector('[name=first_name]').value || '').trim();
+    var last = (form.querySelector('[name=last_name]').value || '').trim();
+    var mail = (form.querySelector('[name=email]').value || '').trim();
+
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    try {
+      var res = await fetch(FORMSUBMIT_AJAX_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: '[Nexa AI] Contact / Demo request — ' + mail,
+          _replyto: mail,
+          _captcha: false,
+          name: (first + ' ' + last).trim(),
+          first_name: first,
+          last_name: last,
+          email: mail,
+          organization: (form.querySelector('[name=organization]').value || '').trim() || '(not provided)',
+          interest: (form.querySelector('[name=interest]').value || '').trim() || '(not selected)',
+          message: (form.querySelector('[name=message]').value || '').trim() || '(no message)',
+          _gotcha: honeypot ? honeypot.value : ''
+        })
+      });
+      var body = await res.json().catch(function () { return {}; });
+      var failed = body.success === false || body.success === 'false';
+      if (!res.ok || body.error || failed) {
+        throw new Error((body && body.message) || body.error || 'Submission failed. Try again later.');
+      }
+      statusEl.className = 'contact-form-status ok';
+      statusEl.textContent = 'Thanks — your message was sent. We will get back to you soon.';
+      btn.textContent = '✓ Sent!';
+      btn.style.background = '#43C59E';
+      form.reset();
+      setTimeout(function () {
+        btn.textContent = origLabel;
+        btn.style.background = '';
+        statusEl.textContent = '';
+        statusEl.className = 'contact-form-status';
+      }, 8000);
+    } catch (err) {
+      statusEl.className = 'contact-form-status err';
+      statusEl.textContent = err.message || 'Something went wrong.';
+      btn.textContent = origLabel;
+    }
+    btn.disabled = false;
   }
 
   // ── Tweaks panel ──
