@@ -51,12 +51,6 @@ A high school student from Okinawa, Japan, and founder of the **Global Finance L
 | **OpenAI** | Sponsor & Strategic Partner |
 | **Microsoft** | Sponsor & Strategic Partner |
 | **Salesforce** | Sponsor & Strategic Partner |
-| **Columbia University** | Research Collaboration |
-| **Georgetown University** | Policy Research Collaboration |
-| **TEDx** | TEDxInnovation U Speaker (Ren Otani) |
-| **NHK Radio** | Featured Speaker |
-| **Okinawa Times / Ryukyu Shimpo** | Media Coverage |
-| **Van Cleef & Arpels** | Brand Collaboration |
  
 ---
  
@@ -71,7 +65,6 @@ We believe AI should serve as a tool that amplifies human connection, not replac
 ## 📬 Contact & Links
  
 - 🔗 **LinkedIn (Ren Otani):** [linkedin.com/in/ren-otani-43130336b](https://www.linkedin.com/in/ren-otani-43130336b/)
-- 🌐 **Global Finance Library:** [globalfinancelibrary.org](https://globalfinancelibrary.org)
 
 ---
  
@@ -82,7 +75,7 @@ This project is operated as a nonprofit initiative. All educational content prod
 ---
  
 <div align="center">
-**Built with ❤️ from Okinawa, Japan 🌺 — for the world.**
+**Built with ❤️ from Tokyo, Japan 🌺 — for the world.**
  
 *"The next generation is not waiting for permission to reshape the world — they are already building."*
  
